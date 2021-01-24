@@ -25,7 +25,7 @@ class CarbonMonthlyScheduleEndpointTest extends TestCase
 
     public function testItValidatesScheduleInMonths()
     {
-        $response = $this->get(sprintf(self::URL, '2021-02-07', 100));
+        $response = $this->get(sprintf(self::URL, '2020-02-07', 100));
         assertEquals(
             ["scheduleInMonths" => ["The schedule in months may not be greater than 36."]],
             json_decode($response->getContent(), true)
@@ -35,11 +35,27 @@ class CarbonMonthlyScheduleEndpointTest extends TestCase
 
     public function testItValidatesInputTypes()
     {
-        $response = $this->get(self::URL);
+        $response = $this->get(sprintf(self::URL, '2020-13-07', '4'));
         assertEquals(
             [
-                "subscriptionStartDate" => ["The subscription start date does not match the format Y-m-d."],
-                "scheduleInMonths" => ["The schedule in months must be an integer."]
+                "subscriptionStartDate" => ["The subscription start date does not match the format Y-m-d."]
+            ],
+            json_decode($response->getContent(), true)
+        );
+        $response->assertStatus(400);
+    }
+
+    public function testSubscriptionDateCannotBeInFuture()
+    {
+        //$response = $this->get(self::URL);
+        $future = new \DateTime("now");
+        $future->add(new \DateInterval('P2D'));
+
+        $response = $this->get(sprintf(self::URL, $future->format('Y-m-d'), 1));
+
+        assertEquals(
+            [
+                "subscriptionStartDate" => ["The subscription start date must be a date before or equal to today."],
             ],
             json_decode($response->getContent(), true)
         );
@@ -50,14 +66,14 @@ class CarbonMonthlyScheduleEndpointTest extends TestCase
     {
         return [
             [
-                '2021-02-07',
+                '2020-02-07',
                 5,
-                ["2021-03-07", "2021-04-07", "2021-05-07", "2021-06-07", "2021-07-07"]
+                ["2020-03-07", "2020-04-07", "2020-05-07", "2020-06-07", "2020-07-07"]
             ],
             [
-                '2021-01-30',
+                '2020-01-30',
                 3,
-                ["2021-02-28", "2021-03-30", "2021-04-30"]
+                ["2020-02-29", "2020-03-30", "2020-04-30"]
             ],
             [
                 '2020-01-31',
@@ -65,7 +81,7 @@ class CarbonMonthlyScheduleEndpointTest extends TestCase
                 ["2020-02-29", "2020-03-31", "2020-04-30"]
             ],
             [
-                '2021-02-10',
+                '2020-02-10',
                 0,
                 []
             ],

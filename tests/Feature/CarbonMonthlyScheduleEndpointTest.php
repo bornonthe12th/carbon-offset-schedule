@@ -47,8 +47,10 @@ class CarbonMonthlyScheduleEndpointTest extends TestCase
 
     public function testSubscriptionDateCannotBeInFuture()
     {
-        //$response = $this->get(self::URL);
+        /** @noinspection PhpUnhandledExceptionInspection */
         $future = new \DateTime("now");
+
+        /** @noinspection PhpUnhandledExceptionInspection */
         $future->add(new \DateInterval('P2D'));
 
         $response = $this->get(sprintf(self::URL, $future->format('Y-m-d'), 1));

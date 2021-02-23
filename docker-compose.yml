@@ -5,20 +5,12 @@ services:
             context: .
             dockerfile: Dockerfile
         restart: unless-stopped
-        volumes:
-            - ./:/var/www
-            - ./config/php/local.ini:/usr/local/etc/php/conf.d/local.ini
-        environment:
-            XDEBUG_CONFIG: remote_host=host.docker.internal
-            PHP_IDE_CONFIG: serverName=docker
-
     webserver:
-        image: nginx:alpine
+        build:
+            context: .
+            dockerfile: DockerfileNginx
         restart: unless-stopped
         ports:
             - "80:80"
-        volumes:
-            - ./config/nginx/conf.d/:/etc/nginx/conf.d/
-            - ./:/var/www
         depends_on:
             - webapp

@@ -1,0 +1,6 @@
+FROM nginx:alpine
+
+WORKDIR /var/www
+
+COPY ./public /var/www/public
+COPY ./config/nginx/conf.d /etc/nginx/conf.d/

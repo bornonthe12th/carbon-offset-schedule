@@ -28,16 +28,13 @@ RUN docker-php-ext-configure gd \
 
 RUN docker-php-ext-install gd
 
-# Development additions
-RUN apk add --no-cache $PHPIZE_DEPS && pecl install xdebug-2.7.2 \
-    && docker-php-ext-enable xdebug \
-    && echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo "xdebug.remote_autostart=on" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo "xdebug.remote_host=host.docker.internal" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
-    && echo "xdebug.remote_port=9000" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
-RUN addgroup -g 1000 -S www && adduser -u 1000 -S www -G www
+#RUN addgroup -g 1000 -S www && adduser -u 1000 -S www -G www
 
-USER www
+COPY . /var/www
+
+RUN chown -R www-data:www-data /var/www
+
+#USER www
 
 EXPOSE 9000

@@ -46,7 +46,7 @@ spec:
     spec:
       containers:
       - name: {{ template "fullname" . }}-nginx
-        image: bornonthe12th/carbon_offset_scheduler_webserver:third
+        image: bornonthe12th/carbon_offset_scheduler_webserver:second
         imagePullPolicy: {{ default "" .Values.image.pullPolicy | quote }}
         ports:
         - name: http
@@ -67,7 +67,7 @@ spec:
           timeoutSeconds: 1
         volumeMounts:
         - name: nginx-config
-          mountPath: /opt/bitnami/nginx/conf/server_blocks
+          mountPath: /etc/nginx/conf.d
       volumes:
       - name: nginx-config
         configMap:

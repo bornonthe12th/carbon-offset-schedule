@@ -1,5 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    app: {{ template "fullname" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+data:
+  nginx.conf: |-
     server {
-      listen 0.0.0.0:80;
+      listen 0.0.0.0:{{ .Values.nginxService.internalPort }};
       index index.php index.html;
       error_log /var/log/nginx/error.log;
       access_log /var/log/nginx/access.log;

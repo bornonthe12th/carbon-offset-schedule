@@ -1,3 +1,17 @@
+## [Update] The challenge below is using a k8 running on a mac
+Requirements
+Minicube
+Helm
+start by navigating to the helm directory 
+run 
+ helm install project .
+ on a different terminate run minikube dashboard
+ 
+ to ssh into a pod 
+ kubectl get pods 
+ kubectl exec -it name-of-pod -- /bin/sh
+
+
 ## Technical Challenge
 The average Brit produces 10.51 tonnes of carbon dioxide emissions
 a year – what’s known as our carbon footprint. Tickr's carbon
